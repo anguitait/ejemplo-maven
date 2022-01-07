@@ -33,7 +33,7 @@
 * Local:      ./mvnw spring-boot:run 
 * Background: nohup bash mvnw spring-boot:run &
 
-### Testing Application
+### Testing ApplicationXX
 * curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'
 #### Using Docker to test this app.
 ```bash
