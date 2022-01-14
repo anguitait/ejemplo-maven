@@ -47,22 +47,24 @@ public class RestData {
 		int recovered = 0;
 		Gson gson = new Gson();
 		String body = call.getBody();
-        Pais[] estados = gson.fromJson(body.toLowerCase(), Pais[].class);
+		if(body != null){
+			Pais[] estados = gson.fromJson(body.toLowerCase(), Pais[].class);
 
-        for(Pais estado : estados) {
-        	response.setDate(estado.getDate());
-        	response.setActive(estado.getActive());
-        	confirmed += estado.getConfirmed();
-        	death += estado.getDeaths();
-        	recovered += estado.getRecovered();
-        }
+	        for(Pais estado : estados) {
+	        	response.setDate(estado.getDate());
+	        	response.setActive(estado.getActive());
+	        	confirmed += estado.getConfirmed();
+	        	death += estado.getDeaths();
+	        	recovered += estado.getRecovered();
+	        }
+	        
+	    	response.setConfirmed(confirmed);
+	    	response.setDeaths(death);
+	    	response.setRecovered(recovered);
+	    	response.setCountry(message);
+	    	response.setMensaje("ok");
+		}
         
-    	response.setConfirmed(confirmed);
-    	response.setDeaths(death);
-    	response.setRecovered(recovered);
-    	response.setCountry(message);
-    	response.setMensaje("ok");
-
 		return response;		
 	}
 	
