@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 @RequestMapping(path = "/rest/mscovid")
 public class RestData {
 	
-	private final static Logger LOGGER = Logger.getLogger("devops.subnivel.Control");
+	private static final Logger LOGGER = Logger.getLogger("devops.subnivel.Control");
 
 	
 	@GetMapping(path = "/test", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -47,7 +47,7 @@ public class RestData {
 		int recovered = 0;
 		Gson gson = new Gson();
 		String body = call.getBody();
-        Pais[] estados = gson.fromJson(call.getBody().toLowerCase(), Pais[].class);
+        Pais[] estados = gson.fromJson(body.toLowerCase(), Pais[].class);
 
         for(Pais estado : estados) {
         	response.setDate(estado.getDate());
@@ -76,10 +76,13 @@ public class RestData {
 	    ResponseEntity<String> call= restTemplate.getForEntity("https://api.covid19api.com/world/total" ,String.class);
 	    Mundial response = new Mundial();
 		Gson gson = new Gson();
-        Mundial estado = gson.fromJson(call.getBody().toLowerCase(), Mundial.class);
-        response.setTotalConfirmed(estado.getTotalConfirmed());
-        response.setTotalDeaths(estado.getTotalDeaths());
-        response.setTotalRecovered(estado.getTotalRecovered());
+		String body = call.getBody();
+		if(body != null){
+	        Mundial estado = gson.fromJson(body.toLowerCase(), Mundial.class);
+	        response.setTotalConfirmed(estado.getTotalConfirmed());
+	        response.setTotalDeaths(estado.getTotalDeaths());
+	        response.setTotalRecovered(estado.getTotalRecovered());
+		}
 
 		return response;		
 	}
