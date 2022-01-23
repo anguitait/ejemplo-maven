@@ -58,7 +58,7 @@ pipeline {
         }
         stage("Paso 6: Dormir(Esperar 10sg) "){
             steps {
-                sh 'sleep 10'
+                sh 'sleep 30'
             }
         }
         stage("Paso 7: Test Alive Service - Testing Application!"){
@@ -70,10 +70,10 @@ pipeline {
             steps {
                 nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'devospusach', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: '/var/jenkins_home/workspace/ejemplo-maven/build/DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '1.0.0']]]
             }
-        } 
+        }
         stage('Paso 9: Descargar desde nexus') {
             steps {
-                sh 'curl -X GET -u ${NEXUS_USER}:${NEXUS_PASS} http://nexus:8081/repository/devospusach/devopsusach/devopsusach/0.0.1/devopsusach-0.0.1.jar -O '       
+                sh 'curl -X GET -u ${NEXUS_USER}:${NEXUS_PASS} http://nexus:8081/repository/devospusach/devopsusach/devopsusach/0.0.1/devopsusach-0.0.1.jar -O '
             }
         }
     }
