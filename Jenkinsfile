@@ -68,7 +68,7 @@ pipeline {
         }
         stage('Paso 8: Subir a nexus') {
             steps {
-                nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'devospusach', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: '/var/jenkins_home/workspace/ejemplo-maven/build/DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '0.0.7']]]
+                nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'devospusach', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: '/var/jenkins_home/workspace/ejemplo-maven/build/DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '1.0.0']]]
             }
         } 
         stage('Paso 9: Descargar desde nexus') {
