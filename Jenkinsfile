@@ -51,31 +51,46 @@ pipeline {
                 }
             }
         }
-        stage("Paso 5: Levantar Springboot APP"){
+        stage('Paso 5: Subir a nexus') {
             steps {
-                sh 'mvn spring-boot:run &'
+                nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'devospusach', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: '/var/jenkins_home/workspace/ejemplo-maven/build/DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '0.0.1']]]
             }
         }
-        stage("Paso 6: Dormir(Esperar 10sg) "){
-            steps {
-                sh 'sleep 30'
-            }
-        }
-        stage("Paso 7: Test Alive Service - Testing Application!"){
-            steps {
-                sh 'curl -X GET "http://localhost:8081/rest/mscovid/test?msg=testing"'
-            }
-        }
-        stage('Paso 8: Subir a nexus') {
-            steps {
-                nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'devospusach', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: '/var/jenkins_home/workspace/ejemplo-maven/build/DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '1.0.0']]]
-            }
-        }
-        stage('Paso 9: Descargar desde nexus') {
+        stage('Paso 6: Descargar desde nexus') {
             steps {
                 sh 'curl -X GET -u ${NEXUS_USER}:${NEXUS_PASS} http://nexus:8081/repository/devospusach/devopsusach/devopsusach/0.0.1/devopsusach-0.0.1.jar -O '
             }
         }
+        stage("Paso 7:Run: Levantar Springboot APP"){
+            steps {
+                sh 'nohup bash java -jar DevOpsUsach2020-0.0.1.jar & >/dev/null'
+            }
+        }
+        stage("Paso 8:Curl: Dormir(Esperar 20sg) "){
+            steps {
+               sh "sleep 20 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
+            }
+        }
+        stage("Paso 9:Subir nueva Version"){
+            steps {
+                //archiveArtifacts artifacts:'build/*.jar'
+                nexusPublisher nexusInstanceId: 'nexus3',
+                    nexusRepositoryId: 'devops-usach-nexus',
+                    packages: [
+                        [$class: 'MavenPackage',
+                            mavenAssetList: [
+                                [classifier: '',
+                                extension: '.jar',
+                                filePath: 'DevOpsUsach2020-0.0.1.jar']
+                            ],
+                    mavenCoordinate: [
+                        artifactId: 'DevOpsUsach2020',
+                        groupId: 'com.devopsusach2020',
+                        packaging: 'jar',
+                        version: '1.0.0']
+                    ]
+                ]
+            }
     }
     post {
         always {
