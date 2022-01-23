@@ -74,14 +74,14 @@ pipeline {
         stage("Paso 9:Subir nueva Version"){
             steps {
                 //archiveArtifacts artifacts:'build/*.jar'
-                nexusPublisher nexusInstanceId: 'nexus3',
-                    nexusRepositoryId: 'devops-usach-nexus',
+                nexusPublisher nexusInstanceId: 'nexus',
+                    nexusRepositoryId: 'devospusach',
                     packages: [
                         [$class: 'MavenPackage',
                             mavenAssetList: [
                                 [classifier: '',
                                 extension: '.jar',
-                                filePath: 'DevOpsUsach2020-0.0.1.jar']
+                                filePath: 'evopsusach-0.0.1.jar']
                             ],
                     mavenCoordinate: [
                         artifactId: 'DevOpsUsach2020',
