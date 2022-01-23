@@ -63,7 +63,7 @@ pipeline {
         }
         stage("Paso 7:Run: Levantar Springboot APP"){
             steps {
-                sh 'nohup java -jar DevOpsUsach2020-0.0.1.jar & >/dev/null'
+                sh 'nohup java -jar devopsusach-0.0.1.jar & >/dev/null'
             }
         }
         stage("Paso 8:Curl: Dormir(Esperar 20sg) "){
